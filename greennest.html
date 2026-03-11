@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GreenNest – Belles Plantes d'Intérieur</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--green-deep:#1a3d2b;--green-mid:#2d6a4f;--green-bright:#40916c;--green-light:#74c69d;--green-pale:#d8f3dc;--green-wash:#f0faf2;--cream:#faf9f6;--text-dark:#1c2b20;--text-mid:#4a5e50;--text-light:#7a9080;--shadow:0 4px 24px rgba(26,61,43,.10);--shadow-lg:0 12px 48px rgba(26,61,43,.16);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-dark);overflow-x:hidden;}
+.page{display:none;} .page.active{display:block;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(64,145,108,.12);padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:68px;}
+.nav-logo{display:flex;align-items:center;gap:8px;font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--green-deep);text-decoration:none;cursor:pointer;}
+.nav-logo span{color:var(--green-bright);}
+.nav-links{display:flex;gap:1.8rem;list-style:none;}
+.nav-links a{text-decoration:none;color:var(--text-mid);font-size:.9rem;font-weight:500;transition:color .2s;cursor:pointer;}
+.nav-links a:hover,.nav-links a.active{color:var(--green-bright);}
+.nav-actions{display:flex;align-items:center;gap:.75rem;}
+.nav-icon-btn{width:38px;height:38px;background:transparent;border:1.5px solid rgba(64,145,108,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-mid);cursor:pointer;transition:all .2s;}
+.nav-icon-btn:hover{background:var(--green-pale);color:var(--green-deep);border-color:var(--green-bright);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;}
+.hamburger span{width:22px;height:2px;background:var(--green-deep);border-radius:2px;transition:all .3s;}
+.mobile-menu{display:none;position:fixed;top:68px;left:0;right:0;background:white;z-index:199;padding:1.5rem 5%;border-bottom:1px solid var(--green-pale);flex-direction:column;gap:1rem;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{color:var(--text-mid);text-decoration:none;font-size:1rem;font-weight:500;padding:.4rem 0;border-bottom:1px solid var(--green-pale);cursor:pointer;}
+.btn-primary{background:var(--green-bright);color:white;padding:.55rem 1.4rem;border-radius:50px;border:none;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:background .2s,transform .15s;}
+.btn-primary:hover{background:var(--green-mid);transform:translateY(-1px);}
+.btn-outline{background:transparent;color:var(--green-bright);border:1.5px solid var(--green-bright);padding:.55rem 1.4rem;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;}
+.btn-outline:hover{background:var(--green-bright);color:white;}
+.section-header{text-align:center;margin-bottom:3rem;}
+.section-header h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,2.6rem);color:var(--green-deep);}
+.section-header p{color:var(--text-mid);font-size:1rem;max-width:520px;margin:.7rem auto 0;line-height:1.7;}
+
+/* HERO */
+.hero{min-height:92vh;display:flex;align-items:center;padding:80px 5% 60px;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0;}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(100deg,rgba(10,30,18,.75) 0%,rgba(10,30,18,.48) 50%,rgba(10,30,18,.12) 100%);z-index:1;}
+.hero-content{position:relative;z-index:2;max-width:600px;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,4vw,3.8rem);font-weight:700;line-height:1.16;color:#fff;margin-bottom:1.2rem;}
+.hero h1 em{color:var(--green-light);font-style:italic;}
+.hero p{font-size:1.05rem;color:rgba(255,255,255,.85);line-height:1.7;max-width:480px;margin-bottom:2rem;}
+.hero-cta{display:flex;gap:1rem;flex-wrap:wrap;}
+.hero-stats{display:flex;gap:1rem;margin-top:3rem;flex-wrap:nowrap;}
+.stat{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(12px);padding:.9rem 1rem;border-radius:16px;text-align:center;flex:1;min-width:0;}
+.stat-num{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:#fff;white-space:nowrap;}
+.stat-label{font-size:.7rem;color:rgba(255,255,255,.7);margin-top:3px;line-height:1.3;}
+
+/* WHY SHOP */
+.why-section{background:white;padding:90px 5%;}
+.why-layout{display:grid;grid-template-columns:1fr auto 1fr;gap:3rem;align-items:center;max-width:1100px;margin:0 auto;}
+.why-col{display:flex;flex-direction:column;gap:2.5rem;}
+.why-col.left{align-items:flex-end;text-align:right;}
+.why-item{display:flex;align-items:flex-start;gap:1rem;max-width:300px;}
+.why-col.left .why-item{flex-direction:row-reverse;}
+.why-icon{width:54px;height:54px;flex-shrink:0;background:var(--green-pale);border-radius:16px;display:flex;align-items:center;justify-content:center;}
+.why-icon svg{width:26px;height:26px;stroke:var(--green-mid);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.why-item h3{font-size:.95rem;font-weight:700;color:var(--green-deep);margin-bottom:.35rem;}
+.why-item p{font-size:.82rem;color:var(--text-mid);line-height:1.6;}
+.why-center-img{display:block;width:200px;height:auto;object-fit:contain;flex-shrink:0;}
+
+/* BANNER */
+.banner-section{background:#4a7c5f;min-height:260px;display:flex;align-items:center;justify-content:space-between;padding:0 4%;overflow:hidden;}
+.banner-plant{width:200px;height:240px;object-fit:contain;object-position:bottom;flex-shrink:0;align-self:flex-end;filter:drop-shadow(0 8px 16px rgba(0,0,0,.2));}
+.banner-plant.right{transform:scaleX(-1);}
+.banner-center{flex:1;text-align:center;padding:40px 2rem;}
+.banner-center h2{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,2.5vw,2.1rem);color:#fff;font-weight:700;margin-bottom:.7rem;line-height:1.3;}
+.banner-center p{color:rgba(255,255,255,.82);font-size:.92rem;line-height:1.65;max-width:400px;margin:0 auto 1.5rem;}
+.banner-btn{background:white;color:var(--green-deep);font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:700;padding:.65rem 1.8rem;border-radius:50px;border:none;cursor:pointer;transition:background .2s;}
+.banner-btn:hover{background:var(--green-pale);}
+
+/* PRODUCTS */
+.products-section{padding:80px 5%;background:var(--cream);}
+.products-tabs{display:flex;gap:.5rem;justify-content:center;margin-bottom:2.5rem;flex-wrap:wrap;}
+.tab-btn{padding:.5rem 1.2rem;border-radius:50px;border:1.5px solid var(--green-pale);background:white;color:var(--text-mid);font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:500;cursor:pointer;transition:all .2s;}
+.tab-btn.active,.tab-btn:hover{background:var(--green-bright);color:white;border-color:var(--green-bright);}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1.4rem;max-width:1200px;margin:0 auto 2rem;}
+.product-card{background:white;border-radius:20px;overflow:hidden;box-shadow:0 2px 12px rgba(26,61,43,.07);transition:box-shadow .2s,transform .2s;cursor:pointer;}
+.product-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-6px);}
+.product-img-wrap{position:relative;background:var(--green-wash);height:200px;overflow:hidden;}
+.product-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .4s;}
+.product-card:hover .product-img-wrap img{transform:scale(1.06);}
+.product-badge{position:absolute;top:10px;left:10px;background:var(--green-bright);color:white;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:50px;}
+.product-info{padding:1rem 1.1rem 1.2rem;}
+.product-name{font-size:.95rem;font-weight:600;color:var(--green-deep);margin-bottom:4px;}
+.product-category{font-size:.75rem;color:var(--text-light);margin-bottom:8px;}
+.product-footer{display:flex;justify-content:space-between;align-items:center;}
+.product-price{font-size:1rem;font-weight:700;color:var(--green-bright);}
+.product-price-old{font-size:.78rem;color:var(--text-light);text-decoration:line-through;margin-left:4px;}
+.add-btn{width:36px;height:36px;background:var(--green-pale);border:none;border-radius:50%;color:var(--green-deep);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s,transform .15s;}
+.add-btn:hover{background:var(--green-bright);color:white;transform:scale(1.1);}
+.add-btn svg{stroke:currentColor;}
+.load-more{display:flex;justify-content:center;margin-top:1rem;}
+
+/* PROMO */
+.promo-banner{background:#4a7c5f;position:relative;overflow:hidden;min-height:240px;display:flex;align-items:center;justify-content:space-between;padding:0 3% 0 5%;gap:0;}
+.promo-left{position:relative;z-index:1;max-width:340px;}
+.promo-tag{display:inline-block;background:rgba(255,255,255,.18);color:white;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 12px;border-radius:50px;margin-bottom:.9rem;border:1px solid rgba(255,255,255,.25);}
+.promo-left h2{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,2.2vw,2rem);color:white;font-weight:700;line-height:1.25;margin-bottom:.6rem;}
+.promo-left p{color:rgba(255,255,255,.78);font-size:.88rem;line-height:1.6;margin-bottom:1.4rem;}
+.promo-cta-btn{background:white;color:var(--green-deep);font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:700;padding:.6rem 1.6rem;border-radius:50px;border:none;cursor:pointer;transition:background .2s;}
+.promo-cta-btn:hover{background:var(--green-pale);}
+.promo-center{position:relative;z-index:1;text-align:center;flex:1;padding:0 2rem;}
+.promo-percent{font-family:'Playfair Display',serif;font-size:clamp(3rem,6vw,5.5rem);font-weight:700;color:white;line-height:1;}
+.promo-percent sup{font-size:.4em;vertical-align:super;}
+.promo-percent-label{font-size:1rem;font-weight:600;color:rgba(255,255,255,.85);margin-top:4px;}
+.promo-plants-right{position:relative;z-index:1;display:flex;align-items:flex-end;flex-shrink:0;}
+.promo-plant-img{height:200px;width:auto;object-fit:contain;object-position:bottom;filter:drop-shadow(0 6px 16px rgba(0,0,0,.25));}
+.promo-plant-img.small{height:150px;}
+
+/* TESTIMONIALS */
+.testimonials-section{padding:80px 5%;background:white;}
+.testimonials-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.4rem;max-width:1100px;margin:0 auto;}
+.testimonial-card{background:var(--green-wash);border-radius:16px;border:1px solid var(--green-pale);overflow:hidden;}
+.testi-img-wrap{width:100%;height:150px;overflow:hidden;}
+.testi-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;transition:transform .4s;}
+.testimonial-card:hover .testi-img-wrap img{transform:scale(1.04);}
+.testi-body{padding:1rem 1.1rem 1.2rem;}
+.testi-stars{color:#f4a21e;font-size:.85rem;margin-bottom:.5rem;}
+.testi-text{font-size:.8rem;color:var(--text-mid);line-height:1.6;margin-bottom:.8rem;font-style:italic;}
+.testi-name{font-size:.82rem;font-weight:700;color:var(--green-deep);}
+.testi-loc{font-size:.7rem;color:var(--text-light);}
+
+/* NEWSLETTER */
+.newsletter-section{position:relative;overflow:hidden;padding:90px 5%;text-align:center;}
+.newsletter-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;}
+.newsletter-overlay{position:absolute;inset:0;background:rgba(26,61,43,.62);z-index:1;}
+.newsletter-content{position:relative;z-index:2;}
+.newsletter-section h2{font-family:'Playfair Display',serif;font-size:2rem;color:white;margin-bottom:.5rem;}
+.newsletter-section p{color:rgba(255,255,255,.82);margin-bottom:2rem;}
+.newsletter-form{display:flex;gap:.75rem;max-width:440px;margin:0 auto;flex-wrap:wrap;justify-content:center;}
+.newsletter-form input{flex:1;min-width:200px;padding:.75rem 1.2rem;border-radius:50px;border:none;background:rgba(255,255,255,.95);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;}
+
+/* BLOG */
+.blog-section{padding:80px 5%;background:var(--cream);}
+.blog-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;max-width:1200px;margin:0 auto;}
+.blog-card{background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(26,61,43,.07);transition:box-shadow .2s,transform .2s;}
+.blog-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-4px);}
+.blog-card img{width:100%;height:140px;object-fit:cover;transition:transform .4s;}
+.blog-card:hover img{transform:scale(1.05);}
+.blog-info{padding:.9rem 1rem 1rem;}
+.blog-tag{font-size:.68rem;font-weight:600;color:var(--green-bright);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;}
+.blog-info h3{font-size:.85rem;font-weight:600;color:var(--green-deep);margin-bottom:.4rem;line-height:1.4;}
+.blog-info p{font-size:.78rem;color:var(--text-mid);line-height:1.55;margin-bottom:.8rem;}
+.read-more{display:inline-block;font-size:.76rem;font-weight:600;color:var(--green-bright);text-decoration:none;background:var(--green-pale);padding:.38rem .9rem;border-radius:50px;transition:background .2s,color .2s;}
+.read-more:hover{background:var(--green-bright);color:white;}
+
+/* FOOTER */
+footer{position:relative;overflow:hidden;color:rgba(255,255,255,.85);padding:70px 5% 30px;}
+.footer-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center bottom;z-index:0;opacity:.28;}
+.footer-overlay{position:absolute;inset:0;background:rgba(10,28,18,.82);z-index:1;}
+.footer-inner{position:relative;z-index:2;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;}
+.footer-brand p{font-size:.875rem;line-height:1.7;margin:.8rem 0 1.5rem;opacity:.70;}
+.footer-brand .nav-logo{color:white;}
+.footer-brand .nav-logo span{color:var(--green-light);}
+.footer-social{display:flex;gap:.75rem;}
+.social-btn{width:38px;height:38px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background .2s;cursor:pointer;text-decoration:none;}
+.social-btn svg{width:17px;height:17px;stroke:rgba(255,255,255,.85);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.social-btn:hover{background:rgba(255,255,255,.22);}
+.footer-col h4{font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:white;margin-bottom:1.2rem;}
+.footer-col ul{list-style:none;}
+.footer-col ul li{margin-bottom:.6rem;}
+.footer-col ul li a{text-decoration:none;color:rgba(255,255,255,.60);font-size:.875rem;transition:color .2s;cursor:pointer;}
+.footer-col ul li a:hover{color:var(--green-light);}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.10);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.footer-bottom p{font-size:.82rem;opacity:.45;}
+
+/* PAGE HERO */
+.page-hero{position:relative;height:280px;display:flex;align-items:center;overflow:hidden;}
+.page-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;}
+.page-hero-overlay{position:absolute;inset:0;background:rgba(10,30,18,.6);z-index:1;}
+.page-hero-content{position:relative;z-index:2;padding:0 5%;}
+.page-hero-content h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);color:white;margin-bottom:.5rem;}
+.page-hero-content p{color:rgba(255,255,255,.8);font-size:1rem;}
+
+/* SHOP PAGE */
+.shop-layout{display:grid;grid-template-columns:230px 1fr;gap:2.5rem;padding:60px 5%;max-width:1300px;margin:0 auto;}
+.shop-filters h3{font-size:1rem;font-weight:700;color:var(--green-deep);margin-bottom:1.2rem;}
+.filter-group{margin-bottom:1.8rem;}
+.filter-group h4{font-size:.82rem;font-weight:700;color:var(--green-deep);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:1px solid var(--green-pale);}
+.filter-option{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;cursor:pointer;}
+.filter-option input{accent-color:var(--green-bright);}
+.filter-option label{font-size:.85rem;color:var(--text-mid);cursor:pointer;}
+.price-range{width:100%;accent-color:var(--green-bright);}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1.4rem;}
+
+/* CARE PAGE */
+.care-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem;padding:0 5% 60px;max-width:1200px;margin:0 auto;}
+.care-card{background:white;border-radius:20px;overflow:hidden;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s;}
+.care-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg);}
+.care-card img{width:100%;height:220px;object-fit:cover;}
+.care-card-body{padding:1.5rem;}
+.care-card-body h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--green-deep);margin-bottom:.6rem;}
+.care-card-body p{font-size:.875rem;color:var(--text-mid);line-height:1.7;margin-bottom:1rem;}
+.care-tips{background:var(--green-wash);padding:60px 5%;}
+.care-tips-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;max-width:1100px;margin:0 auto;}
+.tip-card{background:white;padding:1.6rem;border-radius:16px;border:1px solid var(--green-pale);}
+.tip-icon{font-size:2rem;margin-bottom:.8rem;}
+.tip-card h4{font-size:.95rem;font-weight:700;color:var(--green-deep);margin-bottom:.5rem;}
+.tip-card p{font-size:.82rem;color:var(--text-mid);line-height:1.65;}
+
+/* ABOUT PAGE */
+.about-story{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;padding:80px 5%;max-width:1200px;margin:0 auto;}
+.about-story img{width:100%;border-radius:24px;object-fit:cover;height:480px;box-shadow:var(--shadow-lg);}
+.about-story-text h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,2.6rem);color:var(--green-deep);margin-bottom:1.2rem;}
+.about-story-text p{font-size:.95rem;color:var(--text-mid);line-height:1.8;margin-bottom:1rem;}
+.about-values{background:var(--green-deep);padding:80px 5%;}
+.about-values h2{font-family:'Playfair Display',serif;font-size:2rem;color:white;text-align:center;margin-bottom:3rem;}
+.values-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2rem;max-width:1100px;margin:0 auto;}
+.value-card{text-align:center;padding:2rem;}
+.value-icon{width:64px;height:64px;background:rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;}
+.value-icon svg{width:28px;height:28px;stroke:var(--green-light);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.value-card h3{font-size:1rem;font-weight:700;color:white;margin-bottom:.5rem;}
+.value-card p{font-size:.85rem;color:rgba(255,255,255,.7);line-height:1.65;}
+.team-section{padding:80px 5%;background:var(--cream);}
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;max-width:1000px;margin:0 auto;}
+.team-card{text-align:center;}
+.team-card img{width:140px;height:140px;border-radius:50%;object-fit:cover;margin:0 auto 1rem;display:block;border:4px solid var(--green-pale);}
+.team-card h4{font-size:1rem;font-weight:700;color:var(--green-deep);}
+.team-card span{font-size:.82rem;color:var(--text-light);}
+
+/* CONTACT PAGE */
+.contact-layout{display:grid;grid-template-columns:1fr 1fr;gap:4rem;padding:80px 5%;max-width:1200px;margin:0 auto;align-items:start;}
+.contact-info h2{font-family:'Playfair Display',serif;font-size:2rem;color:var(--green-deep);margin-bottom:1rem;}
+.contact-info>p{color:var(--text-mid);line-height:1.7;margin-bottom:2rem;}
+.contact-item{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1.5rem;}
+.contact-item-icon{width:48px;height:48px;background:var(--green-pale);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.contact-item-icon svg{width:22px;height:22px;stroke:var(--green-mid);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.contact-item h4{font-size:.9rem;font-weight:700;color:var(--green-deep);margin-bottom:.2rem;}
+.contact-item p{font-size:.85rem;color:var(--text-mid);margin:0;}
+.contact-form{background:white;padding:2.5rem;border-radius:24px;box-shadow:var(--shadow);}
+.contact-form h3{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--green-deep);margin-bottom:1.5rem;}
+.form-group{margin-bottom:1.2rem;}
+.form-group label{display:block;font-size:.82rem;font-weight:600;color:var(--text-dark);margin-bottom:.4rem;}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:.75rem 1rem;border:1.5px solid var(--green-pale);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--text-dark);outline:none;transition:border-color .2s;background:var(--green-wash);}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--green-bright);background:white;}
+.form-group textarea{height:120px;resize:vertical;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  nav { padding: 0 3%; }
+  .shop-layout { grid-template-columns: 1fr; }
+  .shop-filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.8rem; }
+  .about-story { grid-template-columns: 1fr; }
+  .about-story img { height: 280px; }
+  .contact-layout { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .products-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+}
+@media(max-width:900px){
+  .why-layout { grid-template-columns: 1fr; gap: 2rem; }
+  .why-col.left { align-items: flex-start; text-align: left; }
+  .why-col.left .why-item { flex-direction: row; }
+  .why-center-img { width: 120px; margin: 0 auto; }
+  .hero h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); }
+}
+@media(max-width:768px){
+  nav { padding: 0 3%; height: 64px; }
+  nav .nav-links, .nav-actions .btn-primary { display: none; }
+  .hamburger { display: flex; }
+  .hero { padding: 50px 4% 35px; min-height: 75vh; }
+  .hero h1 { font-size: clamp(1.6rem, 4.5vw, 2.4rem); line-height: 1.2; }
+  .hero p { font-size: 0.95rem; }
+  .hero-stats { flex-wrap: wrap; gap: 0.5rem; }
+  .stat { min-width: calc(50% - 0.25rem); padding: 0.7rem 0.8rem; }
+  .stat-num { font-size: 1.2rem; }
+  .stat-label { font-size: 0.65rem; }
+  
+  .banner-section { flex-direction: column; padding: 25px 4%; }
+  .banner-plant { width: 100px; height: 120px; }
+  .banner-center { padding: 15px 0; }
+  .banner-center h2 { font-size: clamp(1.2rem, 4vw, 1.8rem); margin-bottom: 0.4rem; }
+  .banner-center p { font-size: 0.85rem; }
+  
+  .promo-banner { flex-direction: column; padding: 35px 4%; text-align: center; gap: 1.2rem; }
+  .promo-plants-right { display: none; }
+  .promo-left { max-width: 100%; }
+  .promo-left h3 { font-size: clamp(1.1rem, 3.5vw, 1.6rem); }
+  
+  .products-grid, .shop-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .product-info { padding: 0.8rem; }
+  .product-name { font-size: 0.85rem; }
+  .product-footer { font-size: 0.9rem; }
+  
+  .blog-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .blog-card-title { font-size: 0.9rem; }
+  
+  .testimonials-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .testimonial-card { padding: 1rem; }
+  .testimonial-text { font-size: 0.85rem; }
+  .testimonial-author { font-size: 0.8rem; }
+  
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .form-row { grid-template-columns: 1fr; }
+  .contact-layout { grid-template-columns: 1fr; }
+  
+  .care-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .section-header h2 { font-size: clamp(1.4rem, 4vw, 2rem); }
+  .section-header p { font-size: 0.9rem; }
+}
+@media(max-width:480px){
+  nav { padding: 0 2%; height: 60px; margin-bottom: 0.5rem; }
+  .nav-logo { font-size: 1.1rem; }
+  .nav-logo svg { width: 28px; height: 28px; }
+  
+  .hero { padding: 40px 3% 30px; min-height: 70vh; }
+  .hero h1 { font-size: clamp(1.3rem, 3.5vw, 2rem); }
+  .hero p { font-size: 0.9rem; line-height: 1.5; }
+  .hero-cta { flex-direction: column; gap: 0.6rem; }
+  .hero-cta .btn-primary, .hero-cta .btn-outline { width: 100%; }
+  
+  .stat { min-width: calc(50% - 0.25rem); padding: 0.6rem 0.6rem; }
+  .stat-num { font-size: 1rem; }
+  .stat-label { font-size: 0.6rem; }
+  
+  .why-section { padding: 50px 3%; }
+  .why-col { gap: 1.5rem; }
+  .why-item { gap: 0.7rem; }
+  .why-icon { width: 44px; height: 44px; }
+  .why-icon svg { width: 22px; height: 22px; }
+  .why-item h3 { font-size: 0.85rem; }
+  .why-item p { font-size: 0.75rem; }
+  
+  .banner-center h2 { font-size: clamp(1rem, 3.5vw, 1.5rem); }
+  .banner-center p { font-size: 0.8rem; }
+  .banner-btn { padding: 0.5rem 1.2rem; font-size: 0.8rem; }
+  
+  .products-section { padding: 60px 3%; }
+  .products-tabs { margin-bottom: 1.5rem; }
+  .products-grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
+  .product-img-wrap { height: 140px; }
+  .product-name { font-size: 0.75rem; }
+  .product-price { font-size: 0.8rem; }
+  .product-info { padding: 0.6rem; }
+  
+  .blog-grid { grid-template-columns: 1fr; gap: 0.8rem; }
+  .blog-card-img { height: 180px; }
+  
+  .testimonials-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .testimonial-card { padding: 0.8rem; }
+  
+  .footer-grid { grid-template-columns: 1fr; gap: 1.2rem; }
+  .footer-brand { margin-bottom: 0.5rem; }
+  .form-group { margin-bottom: 1rem; }
+  .form-group input, .form-group textarea, .form-group select { padding: 0.6rem; font-size: 0.85rem; }
+  
+  .care-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .team-grid { grid-template-columns: 1fr; gap: 1rem; }
+  
+  .promo-banner { padding: 25px 3%; }
+  .promo-left h3 { font-size: clamp(1rem, 3vw, 1.4rem); margin-bottom: 0.5rem; }
+  .promo-left p { font-size: 0.8rem; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" style="font-family:'DM Sans',sans-serif; font-size:0.9rem; color:#2d6a4f; text-decoration:none; font-weight:600; margin-right:1rem;">← Portfolio</a>
+  <a class="nav-logo" onclick="showPage('home')">
+    <svg viewBox="0 0 36 36" fill="none" style="width:32px;height:32px">
+      <path d="M12 26h12l-1.5 4h-9L12 26z" fill="#2d6a4f"/>
+      <path d="M11 24h14v3H11z" fill="#40916c"/>
+      <line x1="18" y1="24" x2="18" y2="14" stroke="#2d6a4f" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M18 18 C14 16 10 12 11 7 C14 8 17 12 18 18Z" fill="#52b788"/>
+      <path d="M18 15 C22 13 26 9 25 4 C22 5 19 9 18 15Z" fill="#40916c"/>
+      <path d="M18 20 C21 19 24 16 23 12 C21 13 19 16 18 20Z" fill="#74c69d"/>
+    </svg>
+    Green<span>Nest</span>
+  </a>
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')" id="nav-home" class="active">Accueil</a></li>
+    <li><a onclick="showPage('shop')" id="nav-shop">Boutique</a></li>
+    <li><a onclick="showPage('care')" id="nav-care">Soins des Plantes</a></li>
+    <li><a onclick="showPage('about')" id="nav-about">À Propos</a></li>
+    <li><a onclick="showPage('contact')" id="nav-contact">Contact</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="nav-icon-btn" title="Search">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    <button class="nav-icon-btn" title="Wishlist">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </button>
+    <button class="nav-icon-btn" title="Cart">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+    </button>
+    <button class="btn-primary" onclick="showPage('shop')">Acheter Maintenant</button>
+    <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a onclick="showPage('home');toggleMenu()">Accueil</a>
+  <a onclick="showPage('shop');toggleMenu()">Boutique</a>
+  <a onclick="showPage('care');toggleMenu()">Soins des Plantes</a>
+  <a onclick="showPage('about');toggleMenu()">À Propos</a>
+  <a onclick="showPage('contact');toggleMenu()">Contact</a>
+</div>
+
+<!-- ========== HOME ========== -->
+<div id="page-home" class="page active">
+  <section class="hero">
+    <img class="hero-bg" src="https://images.pexels.com/photos/1400375/pexels-photo-1400375.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Indoor plants">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>Découvrez de <em>belles</em> plantes d'intérieur pour chaque coin de votre maison</h1>
+      <p>Apportez la nature à l'intérieur. Nous sélectionnons les meilleures plantes d'intérieur, livrées fraîches à votre porte avec des guides de soins experts inclus.</p>
+      <div class="hero-cta">
+        <button class="btn-primary" style="padding:.75rem 2rem;font-size:1rem;" onclick="showPage('shop')">Acheter →</button>
+        <button class="btn-outline" style="padding:.75rem 2rem;font-size:1rem;color:white;border-color:rgba(255,255,255,.6);" onclick="showPage('care')">Soins des Plantes</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num">1 900+</div><div class="stat-label">Variétés de Plantes</div></div>
+        <div class="stat"><div class="stat-num">8 000+</div><div class="stat-label">Clients Satisfaits</div></div>
+        <div class="stat"><div class="stat-num">520+</div><div class="stat-label">Avis 5 Étoiles</div></div>
+        <div class="stat"><div class="stat-num">4.9★</div><div class="stat-label">Note Moyenne</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="why-section">
+    <div class="section-header" style="margin-bottom:3.5rem;"><h2>Pourquoi Acheter chez GreenNest?</h2><p>Des collections soigneusement sélectionnées aux conseils d'experts — nous rendons la parentalité des plantes facile et agréable.</p></div>
+    <div class="why-layout">
+      <div class="why-col left">
+        <div class="why-item"><div class="why-icon"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div><div><h3>Livraison Gratuite & Rapide</h3><p>Commandez avant 14h pour une expédition le même jour. Livraison gratuite sur les commandes de plus de 26 200 FCFA.</p></div></div>
+        <div class="why-item"><div class="why-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><h3>Garantie de Plante Saine</h3><p>Chaque plante quitte notre pépinière en bonne santé. Arrive insatisfait? Nous la remplaçons gratuitement.</p></div></div>
+        <div class="why-item"><div class="why-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div><div><h3>Retours sans Tracas</h3><p>Politique de retour de 30 jours sans questions. Votre satisfaction est notre priorité.</p></div></div>
+      </div>
+      <img class="why-center-img" src="https://images.pexels.com/photos/4751978/pexels-photo-4751978.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Plant in pot">
+      <div class="why-col right">
+        <div class="why-item"><div class="why-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div><h3>Support Client 24/7</h3><p>Nos experts en plantes sont toujours là pour vous aider — chat, email ou téléphone.</p></div></div>
+        <div class="why-item"><div class="why-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div><h3>Paiements Sécurisés</h3><p>Toutes les transactions sont cryptées et entièrement protégées. Achetez en confiance.</p></div></div>
+        <div class="why-item"><div class="why-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div><h3>Sélectionnées avec Amour</h3><p>Chaque plante est sélectionnée à la main par nos botanistes pour sa qualité et son caractère.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="banner-section">
+    <img class="banner-plant left" src="https://images.pexels.com/photos/2123482/pexels-photo-2123482.jpeg?auto=compress&cs=tinysrgb&w=400" alt="">
+    <div class="banner-center">
+      <h2>Plantes d'Intérieur Faciles &<br>Plantes Prêtes pour le Jardin</h2>
+      <p>Explorez notre collection triée de plantes faibles d'entretien parfaites pour les maisons, les bureaux et les cadeaux.</p>
+      <button class="banner-btn" onclick="showPage('shop')">Acheter →</button>
+    </div>
+    <img class="banner-plant right" src="https://images.pexels.com/photos/1400375/pexels-photo-1400375.jpeg?auto=compress&cs=tinysrgb&w=400" alt="">
+  </section>
+
+  <section class="products-section">
+    <div class="section-header"><h2>Nos Plantes Préférées</h2><p>Sélectionnées à la main pour leur beauté, leur facilité de soins et la joie qu'elles apportent à chaque pièce.</p></div>
+    <div class="products-tabs">
+      <button class="tab-btn active">Toutes les Plantes</button><button class="tab-btn">Tropicales</button><button class="tab-btn">Succulentes</button><button class="tab-btn">Purificatrices d'Air</button><button class="tab-btn">Pet Friendly</button>
+    </div>
+    <div class="products-grid" id="home-products"></div>
+    <div class="load-more"><button class="btn-outline" onclick="showPage('shop')">Voir Toutes les Plantes</button></div>
+  </section>
+
+  <section class="promo-banner">
+    <div class="promo-left">
+      <div class="promo-tag">Offre à Durée Limitée</div>
+      <h2>Printemps en Vert —<br>Économisez Gros Cette Saison</h2>
+      <p>Utilisez le code <strong style="color:white;">SPRING35</strong> à la caisse. Valide sur toutes les plantes d'intérieur tant qu'il y a du stock.</p>
+      <button class="promo-cta-btn" onclick="showPage('shop')">Acheter la Vente →</button>
+    </div>
+    <div class="promo-center">
+      <div class="promo-percent"><sup>Up to</sup><br>35%<br><span style="font-size:.4em;font-family:'DM Sans',sans-serif;font-weight:600;letter-spacing:.05em;">OFF</span></div>
+      <div class="promo-percent-label">Toutes les Plantes d'Intérieur!!</div>
+    </div>
+    <div class="promo-plants-right">
+      <img class="promo-plant-img small" src="https://images.pexels.com/photos/1407305/pexels-photo-1407305.jpeg?auto=compress&cs=tinysrgb&w=300" alt="">
+      <img class="promo-plant-img" src="https://images.pexels.com/photos/2123482/pexels-photo-2123482.jpeg?auto=compress&cs=tinysrgb&w=300" alt="">
+    </div>
+  </section>
+
+  <section class="testimonials-section">
+    <div class="section-header"><h2>Nos Clients Satisfaits le Disent Mieux</h2><p>De vrais avis de vrais amoureux des plantes — non édités et non sollicités.</p></div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card"><div class="testi-img-wrap"><img src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Sarah"></div><div class="testi-body"><div class="testi-stars">★★★★★</div><p class="testi-text">"Mon Ficus est arrivé parfaitement emballé et absolument éclatant. La carte de soins était très utile. Mon salon est transformé!"</p><div class="testi-name">Sarah M.</div><div class="testi-loc">Paris, France</div></div></div>
+      <div class="testimonial-card"><div class="testi-img-wrap"><img src="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Emma"></div><div class="testi-body"><div class="testi-stars">★★★★★</div><p class="testi-text">"J'ai commandé 6 fois maintenant et chaque plante est arrivée en bonne santé. Le Pothos pousse comme un fou. Je n'achèterai jamais de plantes ailleurs!"</p><div class="testi-name">Emma L.</div><div class="testi-loc">Bruxelles, Belgique</div></div></div>
+      <div class="testimonial-card"><div class="testi-img-wrap"><img src="https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Marc"></div><div class="testi-body"><div class="testi-stars">★★★★★</div><p class="testi-text">"Le service client a remplacé ma plante endommagée la même semaine, sans questions posées. La qualité est constamment excellente. Hautement recommandé!"</p><div class="testi-name">Marc D.</div><div class="testi-loc">Lyon, France</div></div></div>
+    </div>
+  </section>
+
+  <section class="newsletter-section">
+    <img class="newsletter-bg" src="https://images.pexels.com/photos/1005058/pexels-photo-1005058.jpeg?auto=compress&cs=tinysrgb&w=1400" alt="">
+    <div class="newsletter-overlay"></div>
+    <div class="newsletter-content">
+      <h2>Obtenez le Vert dans Votre Boîte</h2>
+      <p>Conseils de soins des plantes hebdomadaires, offres saisonnières et nouvelles arrivées — directement pour vous.</p>
+      <div class="newsletter-form"><input type="email" placeholder="Entrez votre adresse e-mail…"><button class="btn-primary" style="padding:.75rem 1.8rem;">S'abonner 🌱</button></div>
+    </div>
+  </section>
+
+  <section class="blog-section">
+    <div class="section-header"><h2>Du Blog GreenVibe</h2><p>Développez vos connaissances en matière de plantes avec des conseils, des guides et de l'inspiration.</p></div>
+    <div class="blog-grid">
+      <div class="blog-card"><img src="https://images.pexels.com/photos/931177/pexels-photo-931177.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Blog 1"><div class="blog-info"><div class="blog-tag">Soins des Plantes</div><h3>5 Plantes Faciles pour les Débutants</h3><p>Ces beautés résilientes sont parfaites pour tous les niveaux.</p><a href="#" class="read-more">Lire la Suite</a></div></div>
+      <div class="blog-card"><img src="https://images.pexels.com/photos/1084199/pexels-photo-1084199.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Blog 2"><div class="blog-info"><div class="blog-tag">Décoration Intérieure</div><h3>Top 8 Plantes pour les Pièces Peu Lumineuses</h3><p>Pas de soleil? Pas de problème. Ces plantes prospèrent à l'ombre.</p><a href="#" class="read-more">Lire la Suite</a></div></div>
+      <div class="blog-card"><img src="https://images.pexels.com/photos/4751978/pexels-photo-4751978.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Blog 3"><div class="blog-info"><div class="blog-tag">Qualité de l'Air</div><h3>Plantes Purificatrices pour Votre Maison</h3><p>Découvrez quelles plantes éliminent les toxines et augmentent l'oxygène.</p><a href="#" class="read-more">Lire la Suite</a></div></div>
+      <div class="blog-card"><img src="https://images.pexels.com/photos/3571563/pexels-photo-3571563.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Blog 4"><div class="blog-info"><div class="blog-tag">Cadeaux</div><h3>Meilleures Plantes de Bureau pour Votre Bureau</h3><p>Transformez votre espace de travail avec des plantes qui améliorent l'ambiance.</p><a href="#" class="read-more">Lire la Suite</a></div></div>
+    </div>
+    <div class="load-more" style="margin-top:2.5rem"><button class="btn-outline">Voir Tous les Articles</button></div>
+  </section>
+</div>
+
+<!-- ========== SHOP ========== -->
+<div id="page-shop" class="page">
+  <div class="page-hero">
+    <img src="https://images.pexels.com/photos/3097770/pexels-photo-3097770.jpeg?auto=compress&cs=tinysrgb&w=1400" alt="Shop">
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content"><h1>Notre Boutique de Plantes</h1><p>Plus de 1 900 variétés — trouvez votre compagnon vert parfait</p></div>
+  </div>
+  <div class="shop-layout">
+    <aside class="shop-filters">
+      <h3>Filtrer les Plantes</h3>
+      <div class="filter-group">
+        <h4>Catégorie</h4>
+        <div class="filter-option"><input type="checkbox" checked><label>Toutes les Plantes</label></div>
+        <div class="filter-option"><input type="checkbox"><label>Tropicales</label></div>
+        <div class="filter-option"><input type="checkbox"><label>Succulentes & Cactus</label></div>
+        <div class="filter-option"><input type="checkbox"><label>Purificatrices d'Air</label></div>
+        <div class="filter-option"><input type="checkbox"><label>Fleuries</label></div>
+        <div class="filter-option"><input type="checkbox"><label>Pet Friendly</label></div>
+      </div>
+      <div class="filter-group">
+        <h4>Lumière</h4>
+        <div class="filter-option"><input type="checkbox"><label>Lumière Faible</label></div>
+        <div class="filter-option"><input type="checkbox"><label>Lumière Moyenne</label></div>
+        <div class="filter-option"><input type="checkbox"><label>Lumière Forte</label></div>
+      </div>
+      <div class="filter-group">
+        <h4>Niveau de Soin</h4>
+        <div class="filter-option"><input type="checkbox"><label>Débutant</label></div>
+        <div class="filter-option"><input type="checkbox"><label>Intermédiaire</label></div>
+        <div class="filter-option"><input type="checkbox"><label>Expert</label></div>
+      </div>
+      <div class="filter-group">
+        <h4>Gamme de Prix</h4>
+        <input type="range" class="price-range" min="2145" max="65500" value="39300">
+        <p style="font-size:.82rem;color:var(--text-mid);margin-top:.4rem;">Jusqu'à 39 300 FCFA</p>
+      </div>
+    </aside>
+    <div>
+      <div class="products-tabs" style="justify-content:flex-start;margin-bottom:1.5rem;">
+        <button class="tab-btn active">Tous</button><button class="tab-btn">Tropicales</button><button class="tab-btn">Succulentes</button><button class="tab-btn">Fleuries</button><button class="tab-btn">Purificatrices</button>
+      </div>
+      <div class="shop-grid" id="shop-products"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PLANT CARE ========== -->
+<div id="page-care" class="page">
+  <div class="page-hero">
+    <img src="https://images.pexels.com/photos/1005058/pexels-photo-1005058.jpeg?auto=compress&cs=tinysrgb&w=1400" alt="Plant Care">
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content"><h1>Guides de Soins des Plantes</h1><p>Tout ce que vous devez savoir pour garder vos plantes heureuses et prospères</p></div>
+  </div>
+  <div style="padding:70px 5% 20px;max-width:1200px;margin:0 auto;">
+    <div class="section-header"><h2>Soins par Type de Plante</h2><p>Choisissez votre type de plante ci-dessous pour des instructions de soins personnalisées écrites par nos botanistes.</p></div>
+  </div>
+  <div class="care-grid">
+    <div class="care-card"><img src="https://images.pexels.com/photos/1084199/pexels-photo-1084199.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Tropical"><div class="care-card-body"><h3>Plantes Tropicales</h3><p>Les plantes tropicales adorent la chaleur et l'humidité. Tenez-les éloignées des courants d'air froid et arrosez quand le premier pouce du sol est sec. Pulvérisez leurs feuilles hebdomadairement pour de meilleurs résultats.</p><button class="btn-outline" style="font-size:.85rem;">Voir le Guide Complet →</button></div></div>
+    <div class="care-card"><img src="https://images.pexels.com/photos/1407305/pexels-photo-1407305.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Succulents"><div class="care-card-body"><h3>Succulentes & Cactus</h3><p>Ces beautés tolérantes à la sécheresse prospèrent sans attention. Arrosez profondément mais rarement — une fois tous les 2–3 semaines. Utilisez un sol bien drainant et le coin le plus ensoleillé de votre maison.</p><button class="btn-outline" style="font-size:.85rem;">Voir le Guide Complet →</button></div></div>
+    <div class="care-card"><img src="https://images.pexels.com/photos/931177/pexels-photo-931177.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Flowering"><div class="care-card-body"><h3>Plantes Fleuries</h3><p>Les plantes fleuries ont besoin d'un arrosage constant et d'une lumière indirecte brillante pour fleurir. Ôtez régulièrement les fleurs fanées et alimentez avec un engrais liquide mensuellement pendant la saison de croissance.</p><button class="btn-outline" style="font-size:.85rem;">Voir le Guide Complet →</button></div></div>
+    <div class="care-card"><img src="https://images.pexels.com/photos/3571563/pexels-photo-3571563.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Air Purifying"><div class="care-card-body"><h3>Plantes Purificatrices d'Air</h3><p>Les lys de la paix, les plantes serpents et les pothos sont excellentes pour nettoyer l'air intérieur. Ils tolèrent une lumière faible et un arrosage irrégulier — parfait pour les parents de plantes occupés.</p><button class="btn-outline" style="font-size:.85rem;">Voir le Guide Complet →</button></div></div>
+    <div class="care-card"><img src="https://images.pexels.com/photos/2123482/pexels-photo-2123482.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Large Plants"><div class="care-card-body"><h3>Grandes Plantes</h3><p>Les figuiers et les monsteras sont des points focaux dramatiques. Ils ont besoin de lumière indirecte brillante, d'un arrosage constant et d'un nettoyage occasionnel de leurs grandes feuilles.</p><button class="btn-outline" style="font-size:.85rem;">Voir le Guide Complet →</button></div></div>
+    <div class="care-card"><img src="https://images.pexels.com/photos/4503273/pexels-photo-4503273.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Pet Friendly"><div class="care-card-body"><h3>Plantes Sans Danger pour Animaux</h3><p>Les araignées, les fougères de Boston et les palmiers d'arec sont complètement non-toxiques pour les chats et les chiens tout en ayant un bel aspect. Choix sûrs pour les foyers qui aiment les animaux.</p><button class="btn-outline" style="font-size:.85rem;">Voir le Guide Complet →</button></div></div>
+  </div>
+  <div class="care-tips">
+    <div class="section-header"><h2>Conseils de Soins Essentiels</h2><p>Conseils rapides que chaque parent de plante devrait connaître.</p></div>
+    <div class="care-tips-grid">
+      <div class="tip-card"><div class="tip-icon">💧</div><h4>Arrosage Correct</h4><p>Vérifiez toujours l'humidité du sol avant d'arroser. La plupart des plantes préfèrent sécher légèrement entre les arrosages pour prévenir la pourriture des racines.</p></div>
+      <div class="tip-card"><div class="tip-icon">☀️</div><h4>La Lumière Compte</h4><p>La lumière indirecte brillante convient à la plupart des plantes d'intérieur. Évitez de placer les plantes au soleil direct intense l'après-midi qui peut brûler les feuilles.</p></div>
+      <div class="tip-card"><div class="tip-icon">🌡️</div><h4>Température</h4><p>La plupart des plantes d'intérieur prospèrent entre 15–24°C. Tenez-les éloignées des radiateurs, des bouches de climatisation et des courants d'air froid près des fenêtres.</p></div>
+      <div class="tip-card"><div class="tip-icon">🪴</div><h4>Rempotage</h4><p>Rempotez quand les racines font le tour de la base ou sortent des trous de drainage — généralement tous les 1–2 ans au printemps.</p></div>
+      <div class="tip-card"><div class="tip-icon">🌿</div><h4>Alimentation</h4><p>Alimentez avec un engrais liquide équilibré tous les 2–4 semaines au printemps et en été. Réduisez à mensuel en hiver.</p></div>
+      <div class="tip-card"><div class="tip-icon">✂️</div><h4>Émondage</h4><p>Enlevez régulièrement les feuilles mortes ou jaunes pour encourager la croissance saine et prévenir la propagation des parasites.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== ABOUT ========== -->
+<div id="page-about" class="page">
+  <div class="page-hero">
+    <img src="https://images.pexels.com/photos/6913076/pexels-photo-6913076.jpeg?auto=compress&cs=tinysrgb&w=1400" alt="About">
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content"><h1>À Propos de GreenNest</h1><p>Notre histoire, notre mission, notre amour pour les plantes</p></div>
+  </div>
+  <div class="about-story">
+    <img src="https://images.pexels.com/photos/1005058/pexels-photo-1005058.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Our nursery">
+    <div class="about-story-text">
+      <h2>Cultiver le Vert Depuis 2015</h2>
+      <p>GreenNest est né d'une simple conviction: chaque maison mérite la beauté, la tranquillité et la fraîcheur que les plantes apportent. Fondée en 2015 par une petite équipe de botanistes passionnés et d'amoureux des plantes, nous avons commencé avec une petite pépinière et un grand rêve.</p>
+      <p>Aujourd'hui, nous envoyons plus de 1 900 variétés de plantes à des milliers de foyers à travers le pays, chacune soigneusement sélectionnée, expertement entretenue et emballée avec amour. Chaque plante est livrée avec un guide de soins détaillé écrit par nos botanistes internes.</p>
+      <p>Nous nous engageons pour l'approvisionnement durable, l'emballage écologique et la restitution aux projets de reboisement à chaque commande. Quand vous achetez chez GreenNest, vous n'achetez pas seulement une plante — vous rejoignez un mouvement.</p>
+      <button class="btn-primary" style="margin-top:1rem;" onclick="showPage('contact')">Nous Contacter →</button>
+    </div>
+  </div>
+  <div class="about-values">
+    <h2>Nos Valeurs Fondamentales</h2>
+    <div class="values-grid">
+      <div class="value-card"><div class="value-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3>Qualité D'Abord</h3><p>Chaque plante est inspectée avant de quitter notre pépinière. Nous ne compromis jamais sur la santé des plantes.</p></div>
+      <div class="value-card"><div class="value-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><h3>Durabilité</h3><p>100% d'emballage recyclé, cultivateurs éthiques et compensation carbone à chaque livraison.</p></div>
+      <div class="value-card"><div class="value-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h3>Communauté</h3><p>Des conseils de soins aux ateliers, nous sommes toujours là pour vous aider à développer votre famille verte.</p></div>
+      <div class="value-card"><div class="value-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><h3>Innovation</h3><p>Nous développons constamment de nouvelles méthodes de culture pour garantir des plantes plus saines pour vous.</p></div>
+    </div>
+  </div>
+  <div class="team-section">
+    <div class="section-header"><h2>Rencontrez Notre Équipe</h2><p>Les personnes passionnées derrière chaque plante que nous envoyons.</p></div>
+    <div class="team-grid">
+      <div class="team-card"><img src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Sophie"><h4>Sophie Laurent</h4><span>Fondatrice & Botaniste en Chef</span></div>
+      <div class="team-card"><img src="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Emma"><h4>Emma Clarke</h4><span>Spécialiste des Soins des Plantes</span></div>
+      <div class="team-card"><img src="https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Léa"><h4>Léa Moreau</h4><span>Directrice de la Durabilité</span></div>
+      <div class="team-card"><img src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Marc"><h4>Marc Dubois</h4><span>Logistique & Livraison</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== CONTACT ========== -->
+<div id="page-contact" class="page">
+  <div class="page-hero">
+    <img src="https://images.pexels.com/photos/4503273/pexels-photo-4503273.jpeg?auto=compress&cs=tinysrgb&w=1400" alt="Contact">
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content"><h1>Nous Contacter</h1><p>Nous aimerions vous entendre — questions, retours ou simples salutations 🌿</p></div>
+  </div>
+  <div class="contact-layout">
+    <div class="contact-info">
+      <h2>Parlons de Plantes</h2>
+      <p>Que vous ayez besoin d'aide pour choisir la bonne plante, une question sur votre commande ou des conseils de soins — notre équipe est disponible 7 jours sur 7.</p>
+      <div class="contact-item"><div class="contact-item-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.5a16 16 0 0 0 6 6l.94-.94a2 2 0 0 1 2.1-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.71 16z"/></svg></div><div><h4>Téléphone</h4><p>+1 (555) 234-5678<br>Lun–Dim, 9h–18h</p></div></div>
+      <div class="contact-item"><div class="contact-item-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><h4>Email</h4><p>hello@greennest.com<br>Nous répondons dans les 24 heures</p></div></div>
+      <div class="contact-item"><div class="contact-item-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><h4>Pépinière</h4><p>42 Garden Street<br>Portland, OR 97201</p></div></div>
+      <div class="contact-item"><div class="contact-item-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><h4>Heures d'Ouverture</h4><p>Lun–Ven: 8h–19h<br>Sam–Dim: 9h–17h</p></div></div>
+    </div>
+    <div class="contact-form">
+      <h3>Envoyez-Nous un Message</h3>
+      <div class="form-row">
+        <div class="form-group"><label>Prénom</label><input type="text" placeholder="Sophie"></div>
+        <div class="form-group"><label>Nom</label><input type="text" placeholder="Laurent"></div>
+      </div>
+      <div class="form-group"><label>Adresse Email</label><input type="email" placeholder="sophie@example.com"></div>
+      <div class="form-group"><label>Sujet</label>
+        <select><option>Demande de Commande</option><option>Aide pour les Soins des Plantes</option><option>Retours & Remboursements</option><option>Question Générale</option><option>Partenariat</option></select>
+      </div>
+      <div class="form-group"><label>Message</label><textarea placeholder="Comment pouvons-nous vous aider aujourd'hui?"></textarea></div>
+      <button class="btn-primary" style="width:100%;padding:.85rem;font-size:1rem;">Envoyer un Message 🌱</button>
+    </div>
+  </div>
+  <div style="padding:0 5% 80px;">
+    <div class="section-header" style="padding-top:60px;"><h2>Trouvez Notre Pépinière</h2><p>Venez nous visiter — nous adorerions vous faire visiter nos serres.</p></div>
+    <img style="width:100%;height:350px;object-fit:cover;border-radius:20px;display:block;" src="https://images.pexels.com/photos/1084199/pexels-photo-1084199.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Nursery">
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <img class="footer-bg" src="https://images.pexels.com/photos/4751978/pexels-photo-4751978.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="">
+  <div class="footer-overlay"></div>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="nav-logo" onclick="showPage('home')" style="cursor:pointer;">
+          <svg viewBox="0 0 36 36" fill="none" style="width:26px;height:26px"><path d="M12 26h12l-1.5 4h-9L12 26z" fill="rgba(255,255,255,.6)"/><path d="M11 24h14v3H11z" fill="rgba(255,255,255,.8)"/><line x1="18" y1="24" x2="18" y2="14" stroke="white" stroke-width="1.8" stroke-linecap="round"/><path d="M18 18 C14 16 10 12 11 7 C14 8 17 12 18 18Z" fill="rgba(255,255,255,.9)"/><path d="M18 15 C22 13 26 9 25 4 C22 5 19 9 18 15Z" fill="white"/></svg>
+          Green<span>Nest</span>
+        </a>
+        <p>Nous croyons que chaque maison mérite une touche de vert. Des plantes soigneusement sélectionnées, des soins expertement prodigués, livrés à votre porte.</p>
+        <div class="footer-social">
+          <a href="#" class="social-btn" title="Twitter"><svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+          <a href="#" class="social-btn" title="Instagram"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+          <a href="#" class="social-btn" title="Facebook"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#" class="social-btn" title="YouTube"><svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="rgba(10,28,18,.82)" stroke="none"/></svg></a>
+          <a href="#" class="social-btn" title="Pinterest"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.03-2.83.19-.77 1.27-5.38 1.27-5.38s-.32-.65-.32-1.61c0-1.51.88-2.64 1.97-2.64.93 0 1.38.7 1.38 1.54 0 .94-.6 2.34-.91 3.64-.26 1.09.54 1.97 1.6 1.97 1.92 0 3.2-2.46 3.2-5.37 0-2.22-1.49-3.88-4.18-3.88-3.04 0-4.93 2.27-4.93 4.8 0 .87.26 1.48.67 1.95.19.22.21.31.14.57-.05.19-.16.64-.2.82-.07.26-.27.36-.5.26-1.38-.57-2.02-2.09-2.02-3.8 0-2.83 2.39-6.22 7.14-6.22 3.81 0 6.32 2.76 6.32 5.72 0 3.91-2.17 6.85-5.35 6.85-1.07 0-2.07-.58-2.42-1.23l-.66 2.57c-.24.91-.88 2.05-1.31 2.74.99.3 2.04.47 3.13.47 5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Boutique</h4><ul><li><a onclick="showPage('shop')">Toutes les Plantes</a></li><li><a onclick="showPage('shop')">Plantes Tropicales</a></li><li><a onclick="showPage('shop')">Succulentes</a></li><li><a onclick="showPage('shop')">Purificateurs d'Air</a></li><li><a onclick="showPage('shop')">Ensembles Cadeaux</a></li></ul></div>
+      <div class="footer-col"><h4>Aide</h4><ul><li><a onclick="showPage('care')">Guides de Soins</a></li><li><a onclick="showPage('contact')">Info de Livraison</a></li><li><a onclick="showPage('contact')">Politique de Retour</a></li><li><a onclick="showPage('contact')">FAQ</a></li><li><a onclick="showPage('contact')">Nous Contacter</a></li></ul></div>
+      <div class="footer-col"><h4>Entreprise</h4><ul><li><a onclick="showPage('about')">À Propos de GreenNest</a></li><li><a onclick="showPage('about')">Durabilité</a></li><li><a onclick="showPage('about')">Notre Équipe</a></li><li><a onclick="showPage('contact')">Presse</a></li><li><a href="#">Blog</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 GreenNest. Tous droits réservés. Images: Pexels (Licence Libre)</p>
+      <p>Politique de Confidentialité · Conditions d'Utilisation · Paramètres des Cookies</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+const CART_SVG='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>';
+const CHECK_SVG='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+
+const products=[
+  {name:'Philodendron',cat:'Tropical · Lumière Faible',price:'16 369 FCFA',old:'22 270 FCFA',img:'https://images.pexels.com/photos/1084199/pexels-photo-1084199.jpeg?auto=compress&cs=tinysrgb&w=400',badge:'Meilleure Vente'},
+  {name:'Lys de la Paix',cat:'Purifiant · Facile',price:'13 094 FCFA',img:'https://images.pexels.com/photos/3571563/pexels-photo-3571563.jpeg?auto=compress&cs=tinysrgb&w=400'},
+  {name:'Monstera',cat:'Tropical · Facile à Soigner',price:'9 814 FCFA',img:'https://images.pexels.com/photos/5695171/pexels-photo-5695171.jpeg?auto=compress&cs=tinysrgb&w=400',badge:'Nouveau'},
+  {name:'Plante ZZ',cat:'Tropical · Très Facile',price:'19 644 FCFA',old:'24 890 FCFA',img:'https://images.pexels.com/photos/4503273/pexels-photo-4503273.jpeg?auto=compress&cs=tinysrgb&w=400'},
+  {name:'Ficus Lyrata',cat:'Tropical · Lumière Forte',price:'29 468 FCFA',img:'https://images.pexels.com/photos/6896167/pexels-photo-6896167.jpeg?auto=compress&cs=tinysrgb&w=400',badge:'Populaire'},
+  {name:'Anthurium',cat:'Fleuri · Lumière Moyenne',price:'21 607 FCFA',img:'https://images.pexels.com/photos/7663976/pexels-photo-7663976.jpeg?auto=compress&cs=tinysrgb&w=400'},
+  {name:'Aloe Vera',cat:'Succulente · Très Facile',price:'8 507 FCFA',img:'https://images.pexels.com/photos/4505161/pexels-photo-4505161.jpeg?auto=compress&cs=tinysrgb&w=400'},
+  {name:'Caoutchouc',cat:'Tropical · Feuillage Gras',price:'24 218 FCFA',old:'29 475 FCFA',img:'https://images.pexels.com/photos/1002703/pexels-photo-1002703.jpeg?auto=compress&cs=tinysrgb&w=400'},
+  {name:'Pothos',cat:'Traînant · Très Facile',price:'7 852 FCFA',img:'https://images.pexels.com/photos/2263986/pexels-photo-2263986.jpeg?auto=compress&cs=tinysrgb&w=400'},
+  {name:'Mélange de Cactus',cat:'Désertique · Soins Minimaux',price:'6 539 FCFA',img:'https://images.pexels.com/photos/1407305/pexels-photo-1407305.jpeg?auto=compress&cs=tinysrgb&w=400',badge:'Nouveau'},
+  {name:'Plante Serpent',cat:'Purifiant · Lumière Faible',price:'15 058 FCFA',img:'https://images.pexels.com/photos/2123482/pexels-photo-2123482.jpeg?auto=compress&cs=tinysrgb&w=400'},
+  {name:'Orchidée',cat:'Fleuri · Lumière Forte',price:'25 518 FCFA',old:'31 440 FCFA',img:'https://images.pexels.com/photos/931177/pexels-photo-931177.jpeg?auto=compress&cs=tinysrgb&w=400',badge:'Meilleure Vente'},
+];
+
+function card(p){return`<div class="product-card"><div class="product-img-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy">${p.badge?`<span class="product-badge">${p.badge}</span>`:''}</div><div class="product-info"><div class="product-name">${p.name}</div><div class="product-category">${p.cat}</div><div class="product-footer"><div><span class="product-price">${p.price}</span>${p.old?`<span class="product-price-old">${p.old}</span>`:''}</div><button class="add-btn" onclick="addCart(this)">${CART_SVG}</button></div></div></div>`;}
+
+document.getElementById('home-products').innerHTML=products.slice(0,8).map(card).join('');
+document.getElementById('shop-products').innerHTML=products.map(card).join('');
+
+function addCart(btn){
+  const o=btn.innerHTML;
+  btn.innerHTML=CHECK_SVG;btn.style.background='var(--green-bright)';btn.style.color='white';
+  setTimeout(()=>{btn.innerHTML=o;btn.style.background='';btn.style.color='';},1200);
+}
+
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+  const el=document.getElementById('nav-'+id);
+  if(el)el.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');}
+
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const wrap=btn.closest('.products-tabs')||btn.parentElement;
+    wrap.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

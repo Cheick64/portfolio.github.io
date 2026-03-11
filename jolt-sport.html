@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jolt — Sport Project</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #111111;
+    --white: #f8f7f5;
+    --gray: #888888;
+    --gray-light: #e8e6e2;
+    --gray-mid: #444444;
+    --red: #c0392b;
+    --cream: #f2f0ec;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--white);
+    color: var(--black);
+    overflow-x: hidden;
+  }
+
+  /* ── ANNOUNCEMENT BAR ── */
+  .announcement-bar {
+    display: none;
+  }
+  .announcement-bar span {
+    display: none;
+  }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    background: transparent;
+    border-bottom: none;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    transition: background 0.35s ease, box-shadow 0.35s ease;
+  }
+  nav.scrolled {
+    background: rgba(8,8,8,0.94);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.07);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 26px;
+    letter-spacing: 0.05em;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none;
+    color: rgba(255,255,255,0.85);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .nav-icon-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    color: rgba(255,255,255,0.9);
+    font-size: 13px;
+    font-weight: 500;
+    transition: color 0.2s;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+  .nav-icon-btn:hover { color: var(--white); }
+  .nav-icon-btn svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .cart-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255,255,255,0.9);
+    cursor: pointer;
+    transition: color 0.2s;
+    text-decoration: none;
+  }
+  .cart-icon:hover { color: var(--white); }
+  .cart-icon svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background: var(--red);
+    color: white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-divider {
+    width: 1px;
+    height: 16px;
+    background: rgba(255,255,255,0.2);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    height: 100vh;
+    min-height: 640px;
+    background: var(--black);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 40px;
+    margin-top: 0;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://images.pexels.com/photos/13079720/pexels-photo-13079720.jpeg?auto=compress&cs=tinysrgb&w=1920');
+    background-size: cover;
+    background-position: center 30%;
+    background-repeat: no-repeat;
+    transform: scale(1.04);
+    transition: transform 8s ease;
+  }
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.45) 0%,
+      rgba(0,0,0,0.2) 35%,
+      rgba(0,0,0,0.5) 70%,
+      rgba(0,0,0,0.78) 100%
+    );
+  }
+  .hero:hover .hero-bg { transform: scale(1.0); }
+  .hero-texture { display: none; }
+  .hero-diver { display: none; }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .hero-label {
+    color: rgba(248,247,245,0.7);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    font-weight: 500;
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 5px 16px;
+    border-radius: 20px;
+    backdrop-filter: blur(4px);
+    background: rgba(255,255,255,0.06);
+  }
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 7vw, 96px);
+    color: var(--white);
+    line-height: 1;
+    letter-spacing: 0.04em;
+    margin-bottom: 22px;
+    text-shadow: 0 4px 32px rgba(0,0,0,0.4);
+    white-space: nowrap;
+  }
+  .hero-subtitle {
+    color: rgba(248,247,245,0.7);
+    font-size: 14px;
+    line-height: 1.75;
+    max-width: 480px;
+    margin-bottom: 40px;
+    font-weight: 300;
+    text-align: center;
+  }
+  .btn-primary {
+    display: inline-block;
+    background: var(--white);
+    color: var(--black);
+    padding: 13px 36px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover {
+    background: rgba(255,255,255,0.85);
+    color: var(--black);
+    transform: translateY(-2px);
+  }
+  .btn-dark {
+    background: var(--black);
+    color: var(--white);
+  }
+  .btn-dark:hover {
+    background: var(--gray-mid);
+    color: var(--white);
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 80px 60px; }
+  .section-header { text-align: center; margin-bottom: 48px; }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 4vw, 52px);
+    letter-spacing: 0.04em;
+    margin-bottom: 10px;
+  }
+  .section-sub {
+    color: var(--gray);
+    font-size: 14px;
+    font-weight: 300;
+    max-width: 100%;
+    white-space: nowrap;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* ── PRODUCT GRID ── */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .product-card {
+    cursor: pointer;
+  }
+  .product-img {
+    position: relative;
+    aspect-ratio: 4/5;
+    background: var(--cream);
+    overflow: hidden;
+    margin-bottom: 0;
+    border-radius: 6px;
+  }
+  .product-img-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.4s ease;
+  }
+  .product-card:hover .product-img-inner { transform: scale(1.04); }
+  .product-icon {
+    font-size: 64px;
+    opacity: 0.25;
+    user-select: none;
+  }
+  .product-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(80,80,80,0.72);
+    backdrop-filter: blur(4px);
+    color: white;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    padding: 3px 10px;
+    text-transform: uppercase;
+    border-radius: 20px;
+  }
+  .product-wishlist {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    border: none;
+    outline: none;
+  }
+  .product-wishlist svg {
+    width: 15px; height: 15px;
+    stroke: #888;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke 0.2s, fill 0.2s;
+  }
+  .product-wishlist.liked svg { stroke: #e74c3c; fill: #e74c3c; }
+  .product-wishlist:hover { transform: scale(1.1); }
+  .product-card:hover .product-wishlist { opacity: 1; }
+  .product-wishlist.liked { opacity: 1; }
+  .product-meta { display: flex; justify-content: space-between; align-items: center; padding-top: 8px; }
+  .product-name { font-size: 12px; font-weight: 500; }
+  .product-price { font-size: 12px; color: var(--gray); margin-top: 2px; }
+  .product-add {
+    width: 30px;
+    height: 30px;
+    background: var(--white);
+    border: 1px solid var(--gray-light);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    flex-shrink: 0;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+  .product-add:hover { background: var(--cream); border-color: #ccc; transform: scale(1.08); }
+  .product-add svg {
+    width: 14px; height: 14px;
+    stroke: var(--black);
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .see-all-wrap { text-align: center; }
+  .btn-outline {
+    display: inline-block;
+    padding: 13px 44px;
+    border: 1.5px solid var(--black);
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--black);
+    cursor: pointer;
+    background: transparent;
+    transition: background 0.2s, color 0.2s;
+  }
+  .btn-outline:hover { background: var(--black); color: var(--white); }
+
+  /* ── PROMO BANNER ── */
+  .promo-section {
+    padding: 60px;
+    background: var(--white);
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: 52px;
+    align-items: center;
+  }
+  .promo-img {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    width: 100%;
+    height: 320px;
+  }
+  .promo-sale-text {
+    font-family: var(--font-display);
+    font-size: 140px;
+    color: var(--white);
+    opacity: 0.08;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    letter-spacing: -0.05em;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .promo-sale-big {
+    font-family: var(--font-display);
+    font-size: 80px;
+    color: var(--white);
+    letter-spacing: 0.1em;
+    position: relative;
+    z-index: 2;
+    line-height: 1;
+  }
+  /* Store visual */
+  .store-visual {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .store-letters {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .store-letters span {
+    font-family: var(--font-display);
+    font-size: 72px;
+    color: var(--white);
+    letter-spacing: 0.2em;
+    line-height: 1;
+    opacity: 0.9;
+  }
+  .promo-content {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .promo-tag {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+  .promo-title {
+    font-family: var(--font-display);
+    font-size: clamp(20px, 2vw, 28px);
+    line-height: 1.1;
+    margin-bottom: 10px;
+    letter-spacing: 0.03em;
+  }
+  .promo-body {
+    font-size: 12px;
+    color: var(--gray);
+    line-height: 1.65;
+    max-width: 320px;
+    margin-bottom: 10px;
+    font-weight: 300;
+  }
+  .promo-cta { font-size: 12px; font-weight: 600; margin-bottom: 12px; }
+  .promo-discount {
+    font-family: var(--font-display);
+    font-size: 44px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    margin-bottom: 18px;
+  }
+  .btn-map {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--black);
+    color: var(--white);
+    padding: 10px 22px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    width: fit-content;
+  }
+  .btn-map:hover { background: var(--gray-mid); transform: translateY(-1px); }
+
+  /* ── FEATURED COLLECTIONS ── */
+  .collections-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: 16px;
+  }
+  .coll-card {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--black);
+  }
+  .coll-card.tall { grid-row: span 2; }
+  .coll-img {
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.5s ease;
+    position: relative;
+  }
+  .coll-card.tall .coll-img { min-height: 480px; }
+  .coll-card:hover .coll-img { transform: scale(1.05); }
+
+  /* Collection backgrounds */
+  .bg-footwear { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); }
+  .bg-jacket { background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%); }
+  .bg-accessories { background: linear-gradient(135deg, #1e2a1e 0%, #0d1a0d 100%); }
+  .bg-headwear { background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%); }
+  .bg-bags { background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%); }
+  .bg-bottoms { background: linear-gradient(135deg, #0d1a2a 0%, #1a2d3a 100%); }
+
+  .coll-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.75) 100%);
+    z-index: 2;
+  }
+  .coll-label {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 3;
+    color: var(--white);
+  }
+  .coll-label h3 {
+    font-family: var(--font-display);
+    font-size: 28px;
+    letter-spacing: 0.04em;
+    line-height: 1;
+  }
+  .coll-discover {
+    display: inline-block;
+    margin-top: 8px;
+    background: white;
+    border: none;
+    color: var(--black);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 7px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s, transform 0.15s;
+    text-decoration: none;
+  }
+  .coll-discover:hover { background: var(--gray-light); transform: translateY(-1px); }
+  .coll-icon { font-size: 80px; opacity: 0.15; }
+
+  /* Headwear description */
+  .coll-desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    margin: 6px 0 10px;
+    font-weight: 300;
+    max-width: 200px;
+    line-height: 1.5;
+  }
+
+  /* ── NEWSLETTER ── */
+  .newsletter {
+    background: var(--black);
+    color: var(--white);
+    text-align: center;
+    padding: 80px 60px;
+  }
+  .newsletter .section-title { color: var(--white); }
+  .newsletter .section-sub { color: rgba(248,247,245,0.5); }
+  .newsletter-form {
+    display: flex;
+    gap: 0;
+    max-width: 480px;
+    margin: 40px auto 0;
+  }
+  .newsletter-form input {
+    flex: 1;
+    padding: 14px 20px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-right: none;
+    color: white;
+    font-size: 13px;
+    font-family: var(--font-body);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .newsletter-form input::placeholder { color: rgba(255,255,255,0.35); }
+  .newsletter-form input:focus { border-color: rgba(255,255,255,0.4); }
+  .newsletter-form button {
+    background: var(--white);
+    color: var(--black);
+    border: none;
+    padding: 14px 28px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: background 0.2s;
+  }
+  .newsletter-form button:hover { background: var(--gray-light); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #0d0d0d;
+    color: rgba(248,247,245,0.7);
+    padding: 64px 60px 32px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .footer-brand .nav-logo {
+    color: var(--white);
+    display: block;
+    margin-bottom: 16px;
+    font-size: 28px;
+  }
+  .footer-brand p {
+    font-size: 13px;
+    line-height: 1.75;
+    max-width: 220px;
+    font-weight: 300;
+  }
+  .footer-col h4 {
+    color: var(--white);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 10px; }
+  .footer-col ul li a {
+    text-decoration: none;
+    color: rgba(248,247,245,0.55);
+    font-size: 13px;
+    font-weight: 300;
+    transition: color 0.2s;
+  }
+  .footer-col ul li a:hover { color: var(--white); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: rgba(248,247,245,0.3);
+  }
+  .footer-social { display: flex; gap: 16px; }
+  .footer-social a {
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba(255,255,255,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(248,247,245,0.5);
+    text-decoration: none;
+    font-size: 13px;
+    transition: border-color 0.2s, color 0.2s;
+    border-radius: 4px;
+  }
+  .footer-social a:hover { border-color: white; color: white; }
+  .footer-contact {
+    font-size: 12px;
+    color: rgba(248,247,245,0.35);
+    text-align: right;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-content { animation: fadeUp 0.8s ease both; }
+  .hero-title { animation: fadeUp 0.9s 0.1s ease both; }
+
+  /* ── NEW ARRIVALS BG ── */
+  .new-arrivals { background: var(--white); }
+
+  /* ── PRODUCT VISUALS ── */
+  /* .prod-bg-1 { background: linear-gradient(135deg, #c8c8c8 0%, #e0e0e0 100%); }
+  /* .prod-bg-2 { background: linear-gradient(135deg, #2d5a7d 0%, #1a3a50 100%); }
+  /* .prod-bg-3 { background: linear-gradient(135deg, #1a1a1a 0%, #3d3d3d 100%); }
+  /* .prod-bg-4 { background: linear-gradient(135deg, #c0bdb8 0%, #d8d5d0 100%); }
+  /* .prod-bg-5 { background: linear-gradient(135deg, #1a2535 0%, #2d3a4a 100%); }
+  /* .prod-bg-6 { background: linear-gradient(135deg, #2d4a6e 0%, #1a3050 100%); }
+  /* .prod-bg-7 { background: linear-gradient(135deg, #3a2d1a 0%, #5a4a2a 100%); }
+  /* .prod-bg-8 { background: linear-gradient(135deg, #e0d5c0 0%, #c8bca0 100%); }
+
+  /* ── DIVIDER ── */
+  .divider { height: 1px; background: var(--gray-light); margin: 0 60px; }
+
+  /* ══════════════════════════════
+     HAMBURGER & MOBILE MENU
+  ══════════════════════════════ */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: white;
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(8,8,8,0.97);
+    z-index: 199;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .mobile-menu.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .mobile-menu-inner {
+    display: flex;
+    flex-direction: column;
+    padding: 100px 40px 40px;
+    gap: 4px;
+  }
+  .mobile-menu-inner a {
+    color: white;
+    text-decoration: none;
+    font-size: 28px;
+    font-family: var(--font-display);
+    letter-spacing: 0.04em;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: opacity 0.2s;
+  }
+  .mobile-menu-inner a:hover { opacity: 0.6; }
+
+  /* ══════════════════════════════
+     TABLET — max 1024px
+  ══════════════════════════════ */
+  @media (max-width: 1024px) {
+    nav { padding: 0 20px; }
+    .nav-links { gap: 14px; }
+    .nav-links a { font-size: 11px; }
+    section { padding: 50px 28px; }
+    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .hero-title { font-size: 48px; }
+  }
+
+  /* ══════════════════════════════
+     MOBILE — max 768px
+  ══════════════════════════════ */
+  @media (max-width: 768px) {
+    /* Announcement */
+    .announcement-bar { font-size: 10px; padding: 6px 10px; height: auto; flex-wrap: wrap; gap: 3px; }
+
+    /* Nav */
+    nav { padding: 0 16px; height: 52px; top: 0 !important; }
+    .nav-logo:first-of-type { font-size: 14px; padding: 0 8px; }
+    nav .nav-logo:nth-of-type(2) { display: none; }
+    .nav-links { display: none; }
+    .nav-actions .nav-divider,
+    .nav-actions .nav-text { display: none; }
+    .nav-actions { gap: 8px; }
+    .nav-icon-btn svg { width: 18px; height: 18px; }
+    .hamburger { display: flex; }
+    .mobile-menu { display: block; }
+
+    /* Hero */
+    .hero { height: 90svh; padding: 0 16px; }
+    .hero-title { font-size: 32px; white-space: normal; text-align: center; }
+    .hero-subtitle { font-size: 12px; }
+
+    /* Sections */
+    section { padding: 40px 16px; }
+
+    /* Section header */
+    .section-header { margin-bottom: 24px; }
+    .section-title { font-size: 28px; }
+    .section-sub { white-space: normal; font-size: 12px; }
+
+    /* Products grid — 2 cols on mobile */
+    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .product-name { font-size: 10px; }
+    .product-price { font-size: 10px; }
+
+    /* Promo section */
+    .promo-section {
+      grid-template-columns: 1fr !important;
+      padding: 32px 16px !important;
+      gap: 24px !important;
+    }
+    .promo-img { height: 180px !important; }
+    .promo-title { font-size: 22px !important; }
+    .promo-discount { font-size: 32px !important; }
+
+    /* Contact form */
+    .contact-grid { grid-template-columns: 1fr !important; gap: 30px !important; }
+
+    /* Collections */
+    .coll-rows-wrap > div { grid-template-columns: 1fr 1fr !important; }
+    .coll-rows-wrap > div > div { height: 120px !important; }
+
+    /* Newsletter */
+    .newsletter { padding: 50px 16px !important; }
+    .newsletter-form-sep { flex-direction: column; gap: 10px; }
+    .newsletter-form-sep input,
+    .newsletter-form-sep button { width: 100%; border-radius: 50px !important; }
+
+    /* Footer */
+    footer { padding: 40px 16px 20px; }
+    .footer-grid { grid-template-columns: 1fr !important; gap: 24px; }
+    .footer-brand { grid-column: 1 / -1; }
+    .footer-bottom { flex-direction: column; gap: 6px; text-align: center; }
+    .footer-contact { text-align: center; }
+  }
+
+  /* ══════════════════════════════
+     SMALL MOBILE — max 480px
+  ══════════════════════════════ */
+  @media (max-width: 480px) {
+    .announcement-bar { font-size: 9px; padding: 5px 8px; }
+    nav { padding: 0 12px; height: 48px; }
+    .nav-logo:first-of-type { font-size: 12px; }
+    .nav-icon-btn { width: 32px; height: 32px; }
+
+    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+    .product-name { font-size: 9px; }
+    .product-price { font-size: 9px; }
+
+    .hero-title { font-size: 28px; }
+    .section-title { font-size: 22px; }
+
+    .footer-grid { grid-template-columns: 1fr !important; }
+    .coll-rows-wrap > div { grid-template-columns: 1fr !important; }
+    .coll-rows-wrap > div > div { height: 100px !important; }
+    .promo-section { padding: 24px 12px !important; }
+
+    section { padding: 32px 12px; }
+    footer { padding: 32px 12px 16px; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="announcement-bar">
+  Nouvelle Saison · Réduction 15% sur tous les produits · Découvrez nos
+  <span>NOUVEAUTÉS</span>
+</div>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="index.html" class="nav-logo" style="display: flex; align-items: center; gap: 12px;">← Portfolio</a>
+  <a href="#" class="nav-logo">Jolt</a>
+  <ul class="nav-links">
+    <li><a href="#">Catégories</a></li>
+    <li><a href="#collections">Collections</a></li>
+    <li><a href="#">Boutique</a></li>
+    <li><a href="#">Blog</a></li>
+    <li><a href="#">Trouver une Boutique</a></li>
+  </ul>
+  <div class="nav-actions">
+    <!-- Search -->
+    <button class="nav-icon-btn">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+      <span class="nav-text">Rechercher</span>
+    </button>
+    <div class="nav-divider"></div>
+    <!-- Cart -->
+    <a href="#" class="cart-icon">
+      <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span class="nav-text">Panier (0)</span>
+      <span class="cart-badge">0</span>
+    </a>
+    <div class="nav-divider"></div>
+    <!-- Login -->
+    <a href="#" class="nav-icon-btn">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span class="nav-text">Connexion</span>
+    </a>
+  </div>
+  <!-- Hamburger -->
+  <button class="hamburger" onclick="document.querySelector('.mobile-menu').classList.toggle('open')" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu">
+  <div class="mobile-menu-inner">
+    <a href="#">Catégories</a>
+    <a href="#collections">Collections</a>
+    <a href="#">Boutique</a>
+    <a href="#">Blog</a>
+    <a href="#">Trouver une Boutique</a>
+    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:8px 0;">
+    <a href="#">Rechercher</a>
+    <a href="#">Panier (0)</a>
+    <a href="#">Connexion</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-texture"></div>
+  <div class="hero-diver"></div>
+  <div class="hero-content">
+    <h1 class="hero-title">Projet Jolt Sport</h1>
+    <p class="hero-subtitle">Découvrez notre dernière collection, conçue pour la performance et le style. Propose une gamme complète de vêtements d'extérieur haute performance avec diverses options techniques et motifs au choix.</p>
+    <a href="#arrivals" class="btn-primary">Acheter</a>
+  </div>
+  <!-- Photo by Daniel Torobekov on Pexels (Free License) -->
+</section>
+
+<!-- NEW ARRIVALS -->
+<section class="new-arrivals" id="arrivals">
+  <div class="section-header">
+    <h2 class="section-title">Nouveautés</h2>
+    <p class="section-sub">Nos nouvelles arrivées sont conçues pour résister à vos activités tout en vous gardant au meilleur de votre look</p>
+  </div>
+
+  <div class="products-grid">
+    <div class="product-card">
+      <div class="product-img">
+        <div class="product-img-inner">
+          <img src="https://images.pexels.com/photos/3735218/pexels-photo-3735218.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Carabiner Set" style="width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(18%) brightness(0.97);">
+        </div>
+        <div style="position:absolute;inset:0;background:rgba(200,200,200,0.10);pointer-events:none;border-radius:6px;"></div>
+                <button class="product-wishlist" onclick="this.classList.toggle('liked')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+      </div>
+      <div class="product-meta">
+        <div>
+          <div class="product-name">Ensemble Carabines</div>
+          <div class="product-price">7 860 FCFA</div>
+        </div>
+        <button class="product-add"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">
+        <div class="product-img-inner">
+          <img src="https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Jaq Bag" style="width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(18%) brightness(0.97);">
+        </div>
+        <div style="position:absolute;inset:0;background:rgba(200,200,200,0.10);pointer-events:none;border-radius:6px;"></div>
+                <span class="product-badge">Limited</span>
+        <button class="product-wishlist" onclick="this.classList.toggle('liked')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+      </div>
+      <div class="product-meta">
+        <div>
+          <div class="product-name">Sac Jaq</div>
+          <div class="product-price">20 960 FCFA</div>
+        </div>
+        <button class="product-add"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">
+        <div class="product-img-inner">
+          <img src="https://images.pexels.com/photos/1464625/pexels-photo-1464625.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Naaga Sandal" style="width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(18%) brightness(0.97);">
+        </div>
+        <div style="position:absolute;inset:0;background:rgba(200,200,200,0.10);pointer-events:none;border-radius:6px;"></div>
+                <button class="product-wishlist" onclick="this.classList.toggle('liked')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+      </div>
+      <div class="product-meta">
+        <div>
+          <div class="product-name">Sandale Naaga</div>
+          <div class="product-price">58 295 FCFA</div>
+        </div>
+        <button class="product-add"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">
+        <div class="product-img-inner">
+          <img src="https://images.pexels.com/photos/3735149/pexels-photo-3735149.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Porca Thermos" style="width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(18%) brightness(0.97);">
+        </div>
+        <div style="position:absolute;inset:0;background:rgba(200,200,200,0.10);pointer-events:none;border-radius:6px;"></div>
+                <button class="product-wishlist" onclick="this.classList.toggle('liked')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+      </div>
+      <div class="product-meta">
+        <div>
+          <div class="product-name">Thermos Porca</div>
+          <div class="product-price">8 515 FCFA</div>
+        </div>
+        <button class="product-add"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">
+        <div class="product-img-inner">
+          <img src="https://images.pexels.com/photos/6311392/pexels-photo-6311392.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Kamenoko Liner" style="width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(18%) brightness(0.97);">
+        </div>
+        <div style="position:absolute;inset:0;background:rgba(200,200,200,0.10);pointer-events:none;border-radius:6px;"></div>
+                <span class="product-badge">Limited</span>
+        <button class="product-wishlist" onclick="this.classList.toggle('liked')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+      </div>
+      <div class="product-meta">
+        <div>
+          <div class="product-name">Doublure Kamenoko</div>
+          <div class="product-price">78 600 FCFA</div>
+        </div>
+        <button class="product-add"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">
+        <div class="product-img-inner">
+          <img src="https://images.pexels.com/photos/1878821/pexels-photo-1878821.jpeg?auto=compress&cs=tinysrgb&w=600" alt="P.S Cap" style="width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(18%) brightness(0.97);">
+        </div>
+        <div style="position:absolute;inset:0;background:rgba(200,200,200,0.10);pointer-events:none;border-radius:6px;"></div>
+                <span class="product-badge">Limited</span>
+        <button class="product-wishlist" onclick="this.classList.toggle('liked')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+      </div>
+      <div class="product-meta">
+        <div>
+          <div class="product-name">Casquette P.S</div>
+          <div class="product-price">32 095 FCFA</div>
+        </div>
+        <button class="product-add"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">
+        <div class="product-img-inner">
+          <img src="https://images.pexels.com/photos/5698854/pexels-photo-5698854.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Trail Jacket" style="width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(18%) brightness(0.97);">
+        </div>
+        <div style="position:absolute;inset:0;background:rgba(200,200,200,0.10);pointer-events:none;border-radius:6px;"></div>
+                <button class="product-wishlist" onclick="this.classList.toggle('liked')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+      </div>
+      <div class="product-meta">
+        <div>
+          <div class="product-name">Veste Sentier</div>
+          <div class="product-price">90 945 FCFA</div>
+        </div>
+        <button class="product-add"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">
+        <div class="product-img-inner">
+          <img src="https://images.pexels.com/photos/3622608/pexels-photo-3622608.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Beanie" style="width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(18%) brightness(0.97);">
+        </div>
+        <div style="position:absolute;inset:0;background:rgba(200,200,200,0.10);pointer-events:none;border-radius:6px;"></div>
+                <button class="product-wishlist" onclick="this.classList.toggle('liked')"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></button>
+      </div>
+      <div class="product-meta">
+        <div>
+          <div class="product-name">Bonnet</div>
+          <div class="product-price">18 995 FCFA</div>
+        </div>
+        <button class="product-add"><svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="see-all-wrap">
+    <button class="btn-outline">Voir Tout</button>
+  </div>
+</section>
+
+
+<!-- PROMO BANNER -->
+<div class="promo-section">
+  <div class="promo-img">
+    <!-- Glass-door retail store — Pexels free license -->
+    <img src="https://images.pexels.com/photos/1005638/pexels-photo-1005638.jpeg?auto=compress&cs=tinysrgb&w=1400"
+         alt="Jolt Store Tokyo"
+         style="width:100%;height:100%;object-fit:cover;object-position:center 40%;display:block;filter:none !important;">
+  </div>
+  <div class="promo-content" style="padding:0;">
+    <h2 class="promo-title">Trouvez Votre Style<br>Parfait à Jolt's<br>Tokyo</h2>
+    <p class="promo-body">Bienvenue à la plus nouvelle succursale de Jolt à Shibuya, Japon! Entrez dans notre magasin élégant et branché et découvrez les dernières tendances en mode et en vêtements. Venez vivre une expérience unique et vibrante.</p>
+    <p class="promo-cta">Profitez de la Vente!</p>
+    <div class="promo-discount">50%</div>
+    <a href="#" class="btn-map">
+      <span>📍</span> Voir sur la Carte
+    </a>
+  </div>
+</div>
+
+
+<!-- CONTACT FORM -->
+<section style="padding:80px 60px;background:var(--white);">
+  <div class="contact-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;max-width:1100px;margin:0 auto;">
+
+    <!-- Left: text -->
+    <div>
+      <p style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gray);font-weight:500;margin-bottom:16px;">Nous Contacter</p>
+      <h2 style="font-family:var(--font-display);font-size:clamp(36px,4vw,56px);line-height:1;letter-spacing:0.03em;margin-bottom:20px;">Parlons de<br>Style</h2>
+      <p style="font-size:14px;color:var(--gray);line-height:1.8;font-weight:300;max-width:340px;margin-bottom:36px;">Vous avez une question sur un produit, une commande, ou simplement envie de nous dire bonjour? Nous serions ravis de vous entendre. Notre équipe répond dans les 24 heures.</p>
+
+      <!-- Contact info -->
+      <div style="display:flex;flex-direction:column;gap:18px;">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span style="width:40px;height:40px;background:var(--cream);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          </span>
+          <div>
+            <div style="font-size:11px;color:var(--gray);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:2px;">Téléphone</div>
+            <div style="font-size:14px;font-weight:500;">+1 2 332 419</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span style="width:40px;height:40px;background:var(--cream);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </span>
+          <div>
+            <div style="font-size:11px;color:var(--gray);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:2px;">Courrier Électronique</div>
+            <div style="font-size:14px;font-weight:500;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="81e9e4ededeec1ebeeedf5f2f1eef3f5afe2eeec">[email&#160;protected]</a></div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span style="width:40px;height:40px;background:var(--cream);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </span>
+          <div>
+            <div style="font-size:11px;color:var(--gray);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:2px;">Boutique</div>
+            <div style="font-size:14px;font-weight:500;">Shibuya, Tokyo — Japon</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: form -->
+    <div style="background:var(--cream);border-radius:16px;padding:44px 40px;">
+      <h3 style="font-family:var(--font-display);font-size:26px;letter-spacing:0.04em;margin-bottom:28px;">Envoyer un Message</h3>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray);">Prénom</label>
+          <input type="text" placeholder="Jean" style="padding:12px 16px;border-radius:50px;border:1.5px solid var(--gray-light);background:white;font-size:13px;font-family:var(--font-body);outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='#111'" onblur="this.style.borderColor='#e8e6e2'">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray);">Nom</label>
+          <input type="text" placeholder="Dupont" style="padding:12px 16px;border-radius:50px;border:1.5px solid var(--gray-light);background:white;font-size:13px;font-family:var(--font-body);outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='#111'" onblur="this.style.borderColor='#e8e6e2'">
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;">
+        <label style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray);">Courrier Électronique</label>
+        <input type="email" placeholder="jean@example.com" style="padding:12px 16px;border-radius:50px;border:1.5px solid var(--gray-light);background:white;font-size:13px;font-family:var(--font-body);outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='#111'" onblur="this.style.borderColor='#e8e6e2'">
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;">
+        <label style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray);">Sujet</label>
+        <input type="text" placeholder="Commande, Produit, Général..." style="padding:12px 16px;border-radius:50px;border:1.5px solid var(--gray-light);background:white;font-size:13px;font-family:var(--font-body);outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='#111'" onblur="this.style.borderColor='#e8e6e2'">
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:28px;">
+        <label style="font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray);">Message</label>
+        <textarea placeholder="Écrivez votre message ici..." rows="4" style="padding:14px 16px;border-radius:16px;border:1.5px solid var(--gray-light);background:white;font-size:13px;font-family:var(--font-body);outline:none;resize:none;transition:border-color 0.2s;line-height:1.6;" onfocus="this.style.borderColor='#111'" onblur="this.style.borderColor='#e8e6e2'"></textarea>
+      </div>
+
+      <button onclick="this.innerHTML='✓ Message Envoyé!';this.style.background='#2d5a2d';setTimeout(()=>{this.innerHTML='Envoyer un Message';this.style.background='var(--black)'},3000)"
+              style="width:100%;padding:14px;border-radius:50px;background:var(--black);color:white;border:none;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;font-family:var(--font-body);transition:background 0.2s,transform 0.15s;"
+              onmouseover="this.style.background='#333';this.style.transform='translateY(-1px)'"
+              onmouseout="this.style.background='var(--black)';this.style.transform='translateY(0)'">
+        Envoyer un Message
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<!-- FEATURED COLLECTIONS -->
+<section id="collections" style="padding:60px;">
+  <div class="section-header">
+    <h2 class="section-title">Collections en Vedette</h2>
+    <p class="section-sub">Osez mixer et assortir! Découvrez nos collections pour améliorer votre jeu de mode</p>
+  </div>
+
+  <div class="coll-rows-wrap">
+  <!-- Rangée 1 : petite → moyenne → grande -->
+  <div style="display:grid;grid-template-columns:0.7fr 1fr 1.4fr;gap:10px;margin-bottom:10px;">
+
+    <div style="border-radius:8px;overflow:hidden;height:180px;">
+      <div style="position:relative;width:100%;height:100%;">
+        <img src="https://images.pexels.com/photos/1598508/pexels-photo-1598508.jpeg?auto=compress&cs=tinysrgb&w=500"
+             alt="Footwear" style="width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(100%);">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.32);"></div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+          <h3 style="font-family:var(--font-display);font-size:20px;color:white;letter-spacing:0.05em;">Chaussures</h3>
+        </div>
+      </div>
+    </div>
+
+    <div style="border-radius:8px;overflow:hidden;height:180px;">
+      <div style="position:relative;width:100%;height:100%;">
+        <img src="https://images.pexels.com/photos/6311392/pexels-photo-6311392.jpeg?auto=compress&cs=tinysrgb&w=600"
+             alt="Jacket" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block;filter:grayscale(100%);">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.30);"></div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+          <h3 style="font-family:var(--font-display);font-size:22px;color:white;letter-spacing:0.05em;">Veste</h3>
+        </div>
+      </div>
+    </div>
+
+    <div style="border-radius:8px;overflow:hidden;height:180px;">
+      <div style="position:relative;width:100%;height:100%;">
+        <img src="https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?auto=compress&cs=tinysrgb&w=700"
+             alt="Accessories" style="width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(100%);">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.32);"></div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+          <h3 style="font-family:var(--font-display);font-size:24px;color:white;letter-spacing:0.05em;">Accessoires</h3>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Rangée 2 : grande → moyenne → petite -->
+  <div style="display:grid;grid-template-columns:1.4fr 1fr 0.7fr;gap:10px;">
+
+    <div style="border-radius:8px;overflow:hidden;height:180px;">
+      <div style="position:relative;width:100%;height:100%;">
+        <img src="https://images.pexels.com/photos/1124465/pexels-photo-1124465.jpeg?auto=compress&cs=tinysrgb&w=700"
+             alt="Headwear" style="width:100%;height:100%;object-fit:cover;display:block;">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.28);"></div>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;">
+          <h3 style="font-family:var(--font-display);font-size:24px;color:white;letter-spacing:0.05em;">Chapeaux</h3>
+          <a href="#" class="coll-discover" style="font-size:10px;padding:5px 16px;">Découvrir</a>
+        </div>
+      </div>
+    </div>
+
+    <div style="border-radius:8px;overflow:hidden;height:180px;">
+      <div style="position:relative;width:100%;height:100%;">
+        <img src="https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?auto=compress&cs=tinysrgb&w=600"
+             alt="Bags" style="width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(100%);">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.32);"></div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+          <h3 style="font-family:var(--font-display);font-size:22px;color:white;letter-spacing:0.05em;">Sacs</h3>
+        </div>
+      </div>
+    </div>
+
+    <div style="border-radius:8px;overflow:hidden;height:180px;">
+      <div style="position:relative;width:100%;height:100%;">
+        <img src="https://images.pexels.com/photos/1082528/pexels-photo-1082528.jpeg?auto=compress&cs=tinysrgb&w=500"
+             alt="Bottoms" style="width:100%;height:100%;object-fit:cover;object-position:center 30%;display:block;filter:grayscale(100%);">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.32);"></div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+          <h3 style="font-family:var(--font-display);font-size:20px;color:white;letter-spacing:0.05em;">Bas</h3>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter" style="position:relative;padding:0;overflow:hidden;min-height:320px;display:flex;align-items:center;justify-content:center;">
+  <!-- B&W background image -->
+  <img src="https://images.pexels.com/photos/1571442/pexels-photo-1571442.jpeg?auto=compress&cs=tinysrgb&w=1400"
+       alt="Newsletter background"
+       style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;filter:grayscale(100%) brightness(0.35);">
+  <div style="position:relative;z-index:2;text-align:center;padding:72px 40px;width:100%;">
+    <h2 class="section-title" style="color:white;margin-bottom:10px;">Inscrivez-vous à Notre Infolettre</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,0.6);max-width:480px;margin:0 auto 36px;">Obtenez les derniers secrets et tendances de beauté. Inscrivez-vous à notre infolettre et restez informé de tout ce qui concerne la beauté.</p>
+    <div class="newsletter-form-sep" style="max-width:500px;margin:0 auto;display:flex;gap:12px;justify-content:center;">
+      <input type="email" placeholder="Votre Courrier Électronique" style="flex:1;padding:13px 22px;border-radius:50px;border:1px solid rgba(255,255,255,0.25);background:rgba(255,255,255,0.1);color:white;font-size:13px;font-family:var(--font-body);outline:none;" />
+      <button style="padding:13px 28px;border-radius:50px;background:white;color:var(--black);border:none;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;font-family:var(--font-body);white-space:nowrap;transition:background 0.2s;" onmouseover="this.style.background='#e8e6e2'" onmouseout="this.style.background='white'">Soumettre</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr;align-items:start;">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo" style="color:white;">Jolt</a>
+      <p style="margin-top:14px;">Vivez la Vie de Plein Air avec Style chez Jolt. Achetez maintenant et équipez-vous pour l'aventure chez Jolt.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Catégories</h4>
+      <ul>
+        <li><a href="#">Vestes</a></li>
+        <li><a href="#">Chemises</a></li>
+        <li><a href="#">Kits</a></li>
+        <li><a href="#">T-shirts</a></li>
+        <li><a href="#">Bas</a></li>
+        <li><a href="#">Accessoires</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Service Client</h4>
+      <ul>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Expédition</a></li>
+        <li><a href="#">État de la Commande</a></li>
+        <li><a href="#">Retours &amp; Échanges</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Entreprise</h4>
+      <ul>
+        <li><a href="#">Confidentialité</a></li>
+        <li><a href="#">Guides</a></li>
+        <li><a href="#">Conditions Générales</a></li>
+      </ul>
+    </div>
+    <!-- Social icons column — same level as other columns -->
+    <div class="footer-col">
+      <h4>Suivez-Nous</h4>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <!-- Facebook -->
+        <a href="#" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:rgba(248,247,245,0.6);font-size:13px;transition:color 0.2s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(248,247,245,0.6)'">
+          <span style="width:32px;height:32px;background:white;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#000000"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+          </span>
+          Facebook
+        </a>
+        <!-- Instagram -->
+        <a href="#" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:rgba(248,247,245,0.6);font-size:13px;transition:color 0.2s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(248,247,245,0.6)'">
+          <span style="width:32px;height:32px;background:white;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </span>
+          Instagram
+        </a>
+        <!-- YouTube -->
+        <a href="#" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:rgba(248,247,245,0.6);font-size:13px;transition:color 0.2s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(248,247,245,0.6)'">
+          <span style="width:32px;height:32px;background:white;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#000000"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon fill="white" points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+          </span>
+          YouTube
+        </a>
+        <!-- X / Twitter -->
+        <a href="#" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:rgba(248,247,245,0.6);font-size:13px;transition:color 0.2s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(248,247,245,0.6)'">
+          <span style="width:32px;height:32px;background:white;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="#000000"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </span>
+          X (Twitter)
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Jolt Studio, Inc — Tous Droits Réservés</span>
+    <div class="footer-contact">
+      Appelez-nous: +12 332 419 &nbsp;|&nbsp; FCFA / Français
+    </div>
+  </div>
+</footer>
+
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  const nav = document.querySelector('nav');
+  const annBar = document.querySelector('.announcement-bar');
+  const annH = annBar ? annBar.offsetHeight : 36;
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > annH) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  });
+</script>
+</body>
+</html>
